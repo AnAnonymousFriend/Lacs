@@ -1,17 +1,18 @@
 package main
 
 import (
-	"Lacs/server/api"
+	_ "Lacs/server/api"
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"Lacs/routers"
 	"net"
 
 )
 
 func main(){
-	router := gin.Default()
-	v1 := router.Group("/v1")
-	v1.POST("/devices",api.GetDevices)
+	ginRouter := routers.Routers()
+	ginRouter.Run(":8000")
+	//v1 := router.Group("/v1")
+	//v1.POST("/devices",api.GetDevices)
 
 }
 

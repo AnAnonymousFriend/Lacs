@@ -10,7 +10,6 @@ func Routers() *gin.Engine  {
 	var Router = gin.Default()
 	Router.Use(middleware.Cors())
 	//Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	ApiGroup := Router.Group("/api/v1")
 	// 注册用户路由
 	InitAutoCodeRouter(ApiGroup)
