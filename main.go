@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"Lacs/routers"
 	"net"
-
+	"Lacs/pkg/setting"
 )
 
 func main(){
+	setting.Setup()
 	ginRouter := routers.Routers()
-	ginRouter.Run(":8000")
-	//v1 := router.Group("/v1")
-	//v1.POST("/devices",api.GetDevices)
+	ginRouter.Run(setting.AppSetting.Host)
 
 }
 
