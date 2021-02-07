@@ -6,11 +6,9 @@ import (
 )
 
 func InitAutoCodeRouter(Router *gin.RouterGroup) {
-	DevicesRouter := Router.Group("Devices").
-		Use()
+	DevicesRouter := Router.Group("Devices").Use()
 	{
 		DevicesRouter.GET("all", api.GetDevices)
-
 	}
 }
 
