@@ -18,16 +18,20 @@ var MongoDBSetting = &MongoDB{}
 var AppSetting = &App{}
 
 func Setup()  {
+	globalSetup()
+	CasbinSetting()
+}
+
+func globalSetup()  {
 	var err error
 	cfg, err = ini.Load("./conf/app.ini")
 	if err != nil {
 		println("setting.Setup, fail to parse 'conf/app.ini': %v", err)
 	}
-
-
 	mapTo("app", AppSetting)
 	mapTo("mongo", MongoDBSetting)
 }
+
 
 func mapTo(section string, v interface{}) {
 	err := cfg.Section(section).MapTo(v)

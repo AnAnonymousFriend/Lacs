@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/btcsuite/btcd v0.21.0-beta // indirect
+	github.com/casbin/casbin/v2 v2.23.0 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-ini/ini v1.62.0
 	github.com/gogo/protobuf v1.3.2 // indirect
