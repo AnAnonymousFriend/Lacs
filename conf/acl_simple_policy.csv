@@ -1,6 +1,3 @@
-p, role:reader, domain1, group:commongroup, read
-p, role:writer, domain1, group:commongroup, write
-p, role:super, domain1, group:commongroup, manage
 
 g, role:admin, role:reader, domain1
 g, role:admin, role:writer, domain1
