@@ -1,6 +1,9 @@
 package setting
 
-import "github.com/go-ini/ini"
+import (
+	"github.com/go-ini/ini"
+	"time"
+)
 
 type App struct {
 	Host string
@@ -13,10 +16,21 @@ type MongoDB struct {
 	DbName string
 }
 
-var cfg *ini.File
-var MongoDBSetting = &MongoDB{}
-var AppSetting = &App{}
+type Redis struct {
+	Host        string
+	Password    string
+	MaxIdle     int
+	MaxActive   int
+	IdleTimeout time.Duration
+}
 
+
+
+var cfg *ini.File
+
+var AppSetting = &App{}
+var RedisSetting = &Redis{}
+var MongoDBSetting = &MongoDB{}
 func Setup()  {
 	globalSetup()
 	CasbinSetting()
@@ -30,6 +44,8 @@ func globalSetup()  {
 	}
 	mapTo("app", AppSetting)
 	mapTo("mongo", MongoDBSetting)
+	mapTo("redis", RedisSetting)
+	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
 }
 
 
