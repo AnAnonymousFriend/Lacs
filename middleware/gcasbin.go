@@ -1,0 +1,8 @@
+package middleware
+
+
+
+
+func CasbinVerification()  {
+
+}

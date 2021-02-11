@@ -24,10 +24,7 @@ type Redis struct {
 	IdleTimeout time.Duration
 }
 
-
-
 var cfg *ini.File
-
 var AppSetting = &App{}
 var RedisSetting = &Redis{}
 var MongoDBSetting = &MongoDB{}
