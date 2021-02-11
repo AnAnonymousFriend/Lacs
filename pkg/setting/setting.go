@@ -26,10 +26,11 @@ type Redis struct {
 }
 
 var cfg *ini.File
-var CasbinEnforcer *casbin.SyncedEnforcer
+var CabinEnforcer *casbin.SyncedEnforcer
 var AppSetting = &App{}
 var RedisSetting = &Redis{}
 var MongoDBSetting = &MongoDB{}
+
 func Setup()  {
 	globalSetup()
 	casbinSetup()
@@ -47,7 +48,6 @@ func globalSetup()  {
 	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
 }
 
-
 func mapTo(section string, v interface{}) {
 	err := cfg.Section(section).MapTo(v)
 	if err != nil {
@@ -60,5 +60,5 @@ func casbinSetup()  {
 	if err!=nil {
 		println(err)
 	}
-	CasbinEnforcer = ef
+	CabinEnforcer = ef
 }

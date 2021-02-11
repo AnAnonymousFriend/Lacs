@@ -9,7 +9,7 @@ import (
 
 
 func CasbinVerification(sub string,dom string,obj string,act string)  {
-	if passed, _ := setting.CasbinEnforcer.Enforce(sub, dom, obj, act); passed {
+	if passed, _ := setting.CabinEnforcer.Enforce(sub, dom, obj, act); passed {
 		// permit clark to read data1
 		fmt.Println("Enforce policy passed.")
 	} else {
