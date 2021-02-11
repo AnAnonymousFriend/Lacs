@@ -2,6 +2,7 @@ package setting
 
 import (
 	"github.com/go-ini/ini"
+	"github.com/casbin/casbin/v2"
 	"time"
 )
 
@@ -25,12 +26,13 @@ type Redis struct {
 }
 
 var cfg *ini.File
+var CasbinEnforcer *casbin.SyncedEnforcer
 var AppSetting = &App{}
 var RedisSetting = &Redis{}
 var MongoDBSetting = &MongoDB{}
 func Setup()  {
 	globalSetup()
-	CasbinSetting()
+	casbinSetup()
 }
 
 func globalSetup()  {
@@ -51,4 +53,12 @@ func mapTo(section string, v interface{}) {
 	if err != nil {
 		println("Cfg.MapTo %s err: %v", section, err)
 	}
+}
+
+func casbinSetup()  {
+	ef, err := casbin.NewSyncedEnforcer("../conf/acl_simple_model.conf", "../conf/acl_simple_policy.csv")
+	if err!=nil {
+		println(err)
+	}
+	CasbinEnforcer = ef
 }
