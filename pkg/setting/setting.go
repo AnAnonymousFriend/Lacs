@@ -33,7 +33,7 @@ var MongoDBSetting = &MongoDB{}
 
 func Setup()  {
 	globalSetup()
-	casbinSetup()
+	CasbinSetup()
 }
 
 func globalSetup()  {
@@ -53,12 +53,4 @@ func mapTo(section string, v interface{}) {
 	if err != nil {
 		println("Cfg.MapTo %s err: %v", section, err)
 	}
-}
-
-func casbinSetup()  {
-	ef, err := casbin.NewSyncedEnforcer("../conf/acl_simple_model.conf", "../conf/acl_simple_policy.csv")
-	if err!=nil {
-		println(err)
-	}
-	CabinEnforcer = ef
 }

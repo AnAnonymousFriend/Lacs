@@ -8,7 +8,20 @@ import (
 
 
 func main()  {
-	e, _ := casbin.NewSyncedEnforcer("../conf/acl_simple_model.conf", "../conf/acl_simple_policy.csv")
+	var stringSoure interface{}
+
+	stringSoure = "g, role:admin, role:reader, domain1"
+	println(stringSoure)
+
+	e,err:= casbin.NewDistributedEnforcer("../conf/acl_simple_model.conf",stringSoure)
+	if err !=nil {
+		panic(err)
+		return
+	}
+	//e, _ := casbin.NewSyncedEnforcer("../conf/acl_simple_model.conf",stringSoure)
+
+
+	//e, _ := casbin.NewSyncedEnforcer("../conf/acl_simple_model.conf", "../conf/acl_simple_policy.csv")
 	sub := "clark"   // the user that wants to access a resource.
 	dom := "domain1" // the user who belongs to.
 	obj := "data1"   // the resource that is going to be accessed.

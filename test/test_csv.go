@@ -9,7 +9,7 @@ import (
 )
 
 func main()  {
-
+	ReadCsv("../conf/acl_simple_policy.csv")
 }
 
 func NewCsvFile(date [][]string)  {
