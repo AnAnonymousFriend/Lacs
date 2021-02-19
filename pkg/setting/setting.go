@@ -36,7 +36,11 @@ var MongoDBSetting = &MongoDB{}
 func Setup()  {
 	globalSetup()
 	CasbinSetup()
+
 	Logger = LogSetup()
+	if Logger ==nil {
+		println("Logger 对象为空")
+	}
 }
 
 func globalSetup()  {
