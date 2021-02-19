@@ -11,6 +11,15 @@ type App struct {
 	Host string
 }
 
+type Log struct {
+	Filename string
+	LogSaveName string
+	LogFileMaxSize int
+	LogMaxBackups int
+	LogMaxAge	int
+	LogCompress	bool
+}
+
 type MongoDB struct {
 	Host string
 	UserName string
@@ -30,6 +39,7 @@ var cfg *ini.File
 var CabinEnforcer *casbin.SyncedEnforcer
 var Logger *zap.SugaredLogger
 var AppSetting = &App{}
+var LogSetting = &Log{}
 var RedisSetting = &Redis{}
 var MongoDBSetting = &MongoDB{}
 
@@ -52,6 +62,7 @@ func globalSetup()  {
 	mapTo("app", AppSetting)
 	mapTo("mongo", MongoDBSetting)
 	mapTo("redis", RedisSetting)
+	mapTo("log", LogSetting)
 	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
 }
 

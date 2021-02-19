@@ -1,11 +1,11 @@
 package setting
 
 import (
+	"fmt"
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"os"
 	"time"
-	"fmt"
 )
 
 func LogSetup()  *zap.SugaredLogger {
@@ -27,14 +27,17 @@ func getEncoder() zapcore.Encoder {
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 
-func getLogWriter() zapcore.WriteSyncer  {
-	fileName := getLogFileName()
-	file,_ := os.Create(fileName)
-	return zapcore.AddSync(file)
-}
+func getLogWriter() zapcore.WriteSyncer {
 
-func getLogFilePath() string {
-	return fmt.Sprintf("%s%s", "runtime/", "logs/")
+	fileName := getLogFileName()
+	lumberJackLogger := &lumberjack.Logger{
+		Filename:   fileName,
+		MaxSize:    LogSetting.LogFileMaxSize,
+		MaxBackups: LogSetting.LogMaxBackups,
+		MaxAge:     LogSetting.LogMaxAge,
+		Compress:   LogSetting.LogCompress,
+	}
+	return zapcore.AddSync(lumberJackLogger)
 }
 
 func getLogFileName() string {
@@ -44,3 +47,11 @@ func getLogFileName() string {
 		"log",
 	)
 }
+
+
+//func getLogWriter() zapcore.WriteSyncer  {
+//	fileName := getLogFileName()
+//	file,_ := os.Create(fileName)
+//	return zapcore.AddSync(file)
+//}
+
