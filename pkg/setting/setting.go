@@ -3,6 +3,7 @@ package setting
 import (
 	"github.com/go-ini/ini"
 	"github.com/casbin/casbin/v2"
+	"go.uber.org/zap"
 	"time"
 )
 
@@ -27,6 +28,7 @@ type Redis struct {
 
 var cfg *ini.File
 var CabinEnforcer *casbin.SyncedEnforcer
+var Logger *zap.SugaredLogger
 var AppSetting = &App{}
 var RedisSetting = &Redis{}
 var MongoDBSetting = &MongoDB{}
@@ -34,6 +36,7 @@ var MongoDBSetting = &MongoDB{}
 func Setup()  {
 	globalSetup()
 	CasbinSetup()
+	Logger = LogSetup()
 }
 
 func globalSetup()  {

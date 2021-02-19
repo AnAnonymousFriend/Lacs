@@ -1,18 +1,17 @@
 package main
 
 import (
+	"Lacs/pkg/setting"
+	"Lacs/routers"
 	_ "Lacs/server/api"
 	"fmt"
-	"Lacs/routers"
 	"net"
-	"Lacs/pkg/setting"
 )
 
 func main(){
 	setting.Setup()
 	ginRouter := routers.Routers()
 	ginRouter.Run(setting.AppSetting.Host)
-
 }
 
 func handleUDPConnection()  {
