@@ -2,7 +2,6 @@ package logging
 
 import (
 	"Lacs/pkg/setting"
-	"fmt"
 )
 
 func Info(v ...interface{}) {
@@ -14,6 +13,5 @@ func Debug(v ...interface{}) {
 }
 
 func Error(v ...interface{}) {
-	fmt.Println("执行Log.Error 方法")
 	setting.Logger.Error(v)
 }
