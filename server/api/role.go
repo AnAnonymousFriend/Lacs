@@ -18,7 +18,7 @@ type role struct {
 // @Router /api/v1/login [Get]
 func AddRole(c *gin.Context) bool{
 	roleName := c.PostForm("roleName")
-	collection := setting.NewDataTableCollent("role")
+	collection := setting.NewDataTableCollent(role)
 	_, err := collection.InsertOne(context.Background(), roleName)
 	if err !=nil {
 		return false
