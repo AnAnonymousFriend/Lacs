@@ -11,7 +11,7 @@ import (
 
 var RedisConn *redis.Pool
 
-func Setup() error {
+func RedisSetup() error {
 	RedisConn = &redis.Pool{
 		MaxIdle:     setting.RedisSetting.MaxIdle,
 		MaxActive:   setting.RedisSetting.MaxActive,

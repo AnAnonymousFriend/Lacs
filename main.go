@@ -9,6 +9,7 @@ import (
 )
 
 func main(){
+
 	setting.Setup()
 	ginRouter := routers.Routers()
 	ginRouter.Run(setting.AppSetting.Host)

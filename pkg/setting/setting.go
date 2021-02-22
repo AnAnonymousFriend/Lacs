@@ -1,8 +1,9 @@
 package setting
 
 import (
-	"github.com/go-ini/ini"
 	"github.com/casbin/casbin/v2"
+	"github.com/go-ini/ini"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 	"time"
 )
@@ -42,15 +43,20 @@ var AppSetting = &App{}
 var LogSetting = &Log{}
 var RedisSetting = &Redis{}
 var MongoDBSetting = &MongoDB{}
+var MongoDataBase *mongo.Database
 
 func Setup()  {
 	globalSetup()
+
+
 	CasbinSetup()
 
 	Logger = LogSetup()
-	if Logger ==nil {
+	if Logger == nil {
 		println("Logger 对象为空")
 	}
+
+	MongoDataBase = MongoDBSetup()
 }
 
 func globalSetup()  {
@@ -60,7 +66,7 @@ func globalSetup()  {
 		println("setting.Setup, fail to parse 'conf/app.ini': %v", err)
 	}
 	mapTo("app", AppSetting)
-	mapTo("mongo", MongoDBSetting)
+	mapTo("mongodb", MongoDBSetting)
 	mapTo("redis", RedisSetting)
 	mapTo("log", LogSetting)
 	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second

@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+
 func InitAutoCodeRouter(Router *gin.RouterGroup) {
 	DevicesRouter := Router.Group("Devices").Use()
 	{
