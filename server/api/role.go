@@ -15,7 +15,7 @@ type role struct {
 }
 
 
-// @Summary 角色
+// @Summary 添加角色
 // @Produce  json
 // @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
 // @Router /api/v1/login [Get]

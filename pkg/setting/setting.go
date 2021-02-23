@@ -26,6 +26,7 @@ type MongoDB struct {
 	UserName string
 	Password string
 	DbName string
+	MaxConn uint64
 }
 
 type Redis struct {

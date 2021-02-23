@@ -13,7 +13,7 @@ func MongoDBSetup() *mongo.Database  {
 	defer cancel()
 
 	fmt.Printf("%s\n", MongoDBSetting.Host)
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(MongoDBSetting.Host))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(MongoDBSetting.Host).SetMaxPoolSize(MongoDBSetting.MaxConn))
 	if err !=nil {
 		panic(err)
 	}
