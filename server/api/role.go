@@ -1,14 +1,17 @@
 package api
 
 import (
+	"Lacs/pkg/app"
+	"Lacs/pkg/e"
+	"Lacs/pkg/setting"
 	"context"
 	"github.com/gin-gonic/gin"
-	"Lacs/pkg/setting"
+	"net/http"
 )
 
 type role struct {
-	ID string
-	roleName string
+	RoleID string `bson:"_id,omitempty" json:"roleId"`
+	RoleName string `bson:"roleName" json:roleName`
 }
 
 
@@ -16,12 +19,23 @@ type role struct {
 // @Produce  json
 // @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
 // @Router /api/v1/login [Get]
-func AddRole(c *gin.Context) bool{
-	roleName := c.PostForm("roleName")
-	collection := setting.NewDataTableCollent(role)
-	_, err := collection.InsertOne(context.Background(), roleName)
-	if err !=nil {
-		return false
+func AddRole(ctx *gin.Context) {
+	g := app.Gin{ctx}
+	roleNameParm := ctx.PostForm("roleName")
+
+	var parm = role{
+		RoleName: roleNameParm,
 	}
-	return true
+
+	collection := setting.NewDataTableCollent("role")
+	if collection ==nil {
+		g.Response(http.StatusInternalServerError,e.ERROR,e.GetMsg(e.ERROR))
+	}
+
+	install, err := collection.InsertOne(context.Background(), parm)
+
+	if err !=nil || install ==nil {
+		g.Response(http.StatusInternalServerError,e.ERROR,e.GetMsg(e.ERROR))
+	}
+	g.Response(http.StatusOK,e.SUCCESS,e.GetMsg(e.SUCCESS))
 }

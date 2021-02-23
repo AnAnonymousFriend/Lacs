@@ -18,10 +18,13 @@ func MongoDBSetup() *mongo.Database  {
 		panic(err)
 	}
 	database :=  client.Database(MongoDBSetting.DbName)
-
-	fmt.Printf("%T\n", database) // main.point
 	return  database
 }
+
+func DisConn(client *mongo.Client)  {
+	client.Disconnect(context.Background())
+}
+
 
 func NewDataTableCollent(dataTable string) *mongo.Collection  {
 	return MongoDataBase.Collection(dataTable)

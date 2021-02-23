@@ -14,5 +14,6 @@ func Routers() *gin.Engine  {
 	ApiGroup := Router.Group("/api/v1")
 	// 注册用户路由
 	InitAutoCodeRouter(ApiGroup)
+	InitRoleCodeRouter(ApiGroup)
 	return Router
 }
