@@ -3,7 +3,8 @@ package api
 import (
 	"Lacs/pkg/app"
 	"Lacs/pkg/e"
-	"Lacs/pkg/setting"
+
+	mogo "Lacs/pkg/setting"
 	"context"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -26,16 +27,29 @@ func AddRole(ctx *gin.Context) {
 	var parm = role{
 		RoleName: roleNameParm,
 	}
+	collection := mogo.NewMongoClient("role")
 
-	collection := setting.NewDataTableCollent("role")
 	if collection ==nil {
+		println("Collection")
 		g.Response(http.StatusInternalServerError,e.ERROR,e.GetMsg(e.ERROR))
 	}
-
 	install, err := collection.InsertOne(context.Background(), parm)
 
 	if err !=nil || install ==nil {
+		println(err)
+
 		g.Response(http.StatusInternalServerError,e.ERROR,e.GetMsg(e.ERROR))
 	}
 	g.Response(http.StatusOK,e.SUCCESS,e.GetMsg(e.SUCCESS))
+}
+
+func FindOne(ctx *gin.Context)  {
+	g := app.Gin{ctx}
+	collection := mogo.NewMongoClient("role")
+	cn :=mogo.Mgo{
+		collection,
+	}
+
+	one := cn.FindOne("admin","admin")
+	g.Response(http.StatusOK,e.SUCCESS,one)
 }

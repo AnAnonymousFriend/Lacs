@@ -2,32 +2,45 @@ package setting
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
-	"fmt"
 )
+
+var database  *mongo.Database
+
+type Mgo struct {
+	*mongo.Collection
+}
 
 func MongoDBSetup() *mongo.Database  {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	fmt.Printf("%s\n", MongoDBSetting.Host)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(MongoDBSetting.Host).SetMaxPoolSize(MongoDBSetting.MaxConn))
 	if err !=nil {
 		panic(err)
 	}
-	database :=  client.Database(MongoDBSetting.DbName)
+	database =  client.Database(MongoDBSetting.DbName)
 	return  database
 }
+
+func NewMongoClient(tableName string) *mongo.Collection {
+	con := database.Collection(tableName)
+	return con
+}
+
+
 
 func DisConn(client *mongo.Client)  {
 	client.Disconnect(context.Background())
 }
 
-
-func NewDataTableCollent(dataTable string) *mongo.Collection  {
-	return MongoDataBase.Collection(dataTable)
+func (m Mgo)FindOne(key string, value interface{}) *mongo.SingleResult {
+	filter := bson.D{{key, value}}
+	singleResult := m.Collection.FindOne(context.TODO(), filter)
+	return singleResult
 }
 
 
