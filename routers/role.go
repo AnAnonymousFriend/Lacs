@@ -7,8 +7,10 @@ import (
 
 
 func InitRoleCodeRouter(Router *gin.RouterGroup) {
-	DevicesRouter := Router.Group("role").Use()
+	RoleRouter := Router.Group("role").Use()
 	{
-		DevicesRouter.POST("add", api.AddRole)
+		RoleRouter.POST("add", api.AddRole)
+		RoleRouter.GET("findOne", api.FindOne)
+
 	}
 }

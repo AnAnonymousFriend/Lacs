@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
+	"fmt"
 )
 
 var database  *mongo.Database
@@ -37,10 +38,19 @@ func DisConn(client *mongo.Client)  {
 	client.Disconnect(context.Background())
 }
 
-func (m Mgo)FindOne(key string, value interface{}) *mongo.SingleResult {
-	filter := bson.D{{key, value}}
-	singleResult := m.Collection.FindOne(context.TODO(), filter)
-	return singleResult
+func (m Mgo)FindOne(key string, value interface{}) interface{}{
+	if m.Collection ==nil {
+		fmt.Println("MongoDB Collection is nil")
+		return nil
+	}
+	var result interface{}
+	filter := bson.D{{"roleName", "admin"}}
+	err := m.Collection.FindOne(context.TODO(), filter).Decode(&result)
+	if err !=nil {
+		fmt.Println(err)
+		return nil
+	}
+	return result
 }
 
 

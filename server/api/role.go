@@ -3,10 +3,10 @@ package api
 import (
 	"Lacs/pkg/app"
 	"Lacs/pkg/e"
-
 	mogo "Lacs/pkg/setting"
 	"context"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 )
 
@@ -45,11 +45,14 @@ func AddRole(ctx *gin.Context) {
 
 func FindOne(ctx *gin.Context)  {
 	g := app.Gin{ctx}
+	var result role
+	roleNameParm := ctx.Query("roleName")
 	collection := mogo.NewMongoClient("role")
-	cn :=mogo.Mgo{
-		collection,
+	filter := bson.D{{"roleName", roleNameParm}}
+	err := collection.FindOne(context.TODO(), filter).Decode(&result)
+	if err != nil {
+		panic(err)
 	}
+	g.Response(http.StatusOK,e.SUCCESS,result)
 
-	one := cn.FindOne("admin","admin")
-	g.Response(http.StatusOK,e.SUCCESS,one)
 }
