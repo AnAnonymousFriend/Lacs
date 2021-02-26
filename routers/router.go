@@ -15,5 +15,6 @@ func Routers() *gin.Engine  {
 	// 注册用户路由
 	InitAutoCodeRouter(ApiGroup)
 	InitRoleCodeRouter(ApiGroup)
+	InitUserCodeRouter(ApiGroup)
 	return Router
 }

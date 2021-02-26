@@ -13,5 +13,6 @@ func InitRoleCodeRouter(Router *gin.RouterGroup) {
 		RoleRouter.GET("findOne", api.FindOne)
 		RoleRouter.GET("all", api.FindAll)
 		RoleRouter.POST("deleteRole",api.DeleteRoleById)
+		RoleRouter.POST("deleteRoleAll",api.DeleteRoleAll)
 	}
 }
