@@ -7,7 +7,9 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	 "go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
+	"fmt"
 )
 
 type role struct {
@@ -19,7 +21,7 @@ type role struct {
 // @Summary 添加角色
 // @Produce  json
 // @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
-// @Router /api/v1/login [Get]
+// @Router /api/v1/AddRole [Get]
 func AddRole(c *gin.Context) {
 	g := app.Gin{c}
 	roleNameParm := c.PostForm("roleName")
@@ -43,6 +45,10 @@ func AddRole(c *gin.Context) {
 	g.Response(http.StatusOK,e.SUCCESS,e.GetMsg(e.SUCCESS))
 }
 
+// @Summary 查找角色
+// @Produce  json
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/findOne [Get]
 func FindOne(c *gin.Context)  {
 	g := app.Gin{c}
 	var result role
@@ -57,6 +63,10 @@ func FindOne(c *gin.Context)  {
 
 }
 
+// @Summary 查找角色列表
+// @Produce  json
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/findAll [Get]
 func FindAll(c *gin.Context)  {
 	g := app.Gin{c}
 	collection := mogo.NewMongoClient("role")
@@ -77,22 +87,43 @@ func FindAll(c *gin.Context)  {
 		}
 		roles = append(roles, &elem)
 	}
-
-
-
-
 	g.Response(http.StatusOK,e.SUCCESS,roles)
 }
 
-
+// @Summary 根据角色ID 删除
+// @Produce  json
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/deleteRoleById [Get]
 func DeleteRoleById(c *gin.Context)  {
 	g := app.Gin{c}
-	roleId := c.Query("roleId")
+	roleId := c.PostForm("roleId")
+	obj_id, err := primitive.ObjectIDFromHex(roleId)
+	if err != nil {
+		fmt.Println(err)
+		g.Response(http.StatusInternalServerError,e.ERROR,nil)
+		return
+	}
 	collection := mogo.NewMongoClient("role")
-	filter := bson.D{{"roleId", roleId}}
-	result,err := collection.DeleteOne(context.Background(),filter)
+	filter := bson.D{{"_id", obj_id}}
+	result,err := collection.DeleteMany(context.Background(),filter)
 	if err !=nil {
 		g.Response(http.StatusInternalServerError,e.ERROR,nil)
+		return
 	}
-	g.Response(http.StatusOK,e.SUCCESS,result)
+	g.Response(http.StatusOK,e.SUCCESS,result.DeletedCount)
+}
+
+// @Summary 删除所有
+// @Produce  json
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/deleteRoleById [Get]
+func DeleteRoleAll(c *gin.Context)  {
+	g := app.Gin{c}
+	collection := mogo.NewMongoClient("role")
+	result,err := collection.DeleteMany(context.Background(),nil)
+	if err !=nil {
+		g.Response(http.StatusInternalServerError,e.ERROR,nil)
+		return
+	}
+	g.Response(http.StatusOK,e.SUCCESS,result.DeletedCount)
 }
