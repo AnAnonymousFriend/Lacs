@@ -4,8 +4,8 @@ import (
 	"Lacs/pkg/app"
 	"Lacs/pkg/e"
 	mogo "Lacs/pkg/setting"
+	"Lacs/pkg/util"
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
@@ -14,10 +14,12 @@ import (
 func Login(c *gin.Context)  {
 	g := app.Gin{c}
 	var result user
+	data := make(map[string]interface{})
+
 	userName := c.PostForm("userName")
-	password := c.PostForm("password")
+	passWord := c.PostForm("password")
 	collection := mogo.NewMongoClient("user")
-	filter := bson.D{{"_userName", userName},{"_password", password}}
+	filter := bson.D{{"_userName", userName},{"_password", passWord}}
 	err := collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
 		g.Response(http.StatusInternalServerError,e.ERROR,nil)
@@ -25,9 +27,13 @@ func Login(c *gin.Context)  {
 	}
 
 	if len(result.UserID) >0 {
-
+		token, err := util.GenerateToken(userName, passWord)
+		if err != nil {
+			g.Response(http.StatusInternalServerError,e.ERROR,nil)
+			return
+		}
+		data["token"] = token
 	}
-
-	fmt.Println(result)
-	g.Response(http.StatusOK,e.SUCCESS,result)
+	data["info"] = result
+	g.Response(http.StatusOK,e.SUCCESS,data)
 }
