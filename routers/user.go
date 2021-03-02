@@ -10,5 +10,6 @@ func InitUserCodeRouter(Router *gin.RouterGroup) {
 	{
 		UserRouter.GET("add", api.AddRole)
 		UserRouter.POST("login",api.Login)
+		UserRouter.POST("addUser",api.AddUser)
 	}
 }

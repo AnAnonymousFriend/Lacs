@@ -5,18 +5,19 @@ import (
 	"Lacs/pkg/e"
 	mogo "Lacs/pkg/setting"
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
+	u "Lacs/pkg/util"
 )
 
 type user struct {
 	UserID string `bson:"_id,omitempty" json:"userId"`
 	UserName string `bson:"_userName,omitempty" json:"userName"`
 	Password string `bson:"_password,omitempty" json:"password"`
+	RoleId string `bson:"_roleId,omitempty" json:"roleId"`
 }
-
-
 
 // @Summary 查找角色列表
 // @Produce  json
@@ -45,16 +46,26 @@ func FindUserAll(c *gin.Context)  {
 	g.Response(http.StatusOK,e.SUCCESS,users)
 }
 
-func Login(c *gin.Context)  {
+func AddUser(c *gin.Context)  {
 	g := app.Gin{c}
-	var result user
-	userName := c.PostForm("userName")
-	password := c.PostForm("password")
-	collection := mogo.NewMongoClient("user")
-	filter := bson.D{{"_userName", userName},{"_password", password}}
-	err := collection.FindOne(context.TODO(), filter).Decode(&result)
-	if err != nil {
-		panic(err)
+
+	name := c.PostForm("userName")
+	password := c.PostForm("passWord")
+	if len(password) > 0 {
+		password = u.Md5V(password)
 	}
-	g.Response(http.StatusOK,e.SUCCESS,result)
+	collection := mogo.NewMongoClient("user")
+
+	var parm = user{
+		UserName: name,
+		Password: password,
+	}
+
+	inert, err := collection.InsertOne(context.Background(), parm)
+	if err !=nil {
+		println(err)
+	}
+	fmt.Println(inert)
+	g.Response(http.StatusOK,e.SUCCESS,inert)
+
 }
