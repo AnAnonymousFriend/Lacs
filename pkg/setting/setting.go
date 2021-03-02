@@ -10,6 +10,7 @@ import (
 
 type App struct {
 	Host string
+	JwtSecret string
 }
 
 type Log struct {
