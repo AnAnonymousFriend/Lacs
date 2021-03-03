@@ -33,7 +33,8 @@ func Login(c *gin.Context)  {
 			return
 		}
 		data["token"] = token
+		data["info"] = result
+
 	}
-	data["info"] = result
 	g.Response(http.StatusOK,e.SUCCESS,data)
 }
