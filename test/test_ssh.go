@@ -34,14 +34,15 @@ func Protocol(p string) Option {
 
 type clientConfig ssh.ClientConfig
 
-func (con clientConfig)SetPassword(sshType int,password string)  {
+func (con clientConfig)SetPassword(sshType int,password string) clientConfig {
 	if sshType == 0 {
 		con.Auth = []ssh.AuthMethod{ssh.Password(password)}
 	} else {
 		con.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
 	}
-
+	return con
 }
+
 func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
 	keyPath, err := homedir.Expand(kPath)
 	if err != nil {
@@ -88,7 +89,6 @@ func NewSshClient(d *Device) (*ssh.Client, error) {
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(), //这个可以， 但是不够安全
 		//HostKeyCallback: hostKeyCallBackFunc(h.Host),
 	}
-
 
 	config.Auth = []ssh.AuthMethod{ssh.Password(d.Password)}
 	addr := fmt.Sprintf("%s:%d", d.Host, d.Port)
