@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"Lacs/server/api"
 	"github.com/gin-gonic/gin"
 	//ginSwagger "github.com/swaggo/gin-swagger"
 	"Lacs/middleware"
@@ -12,6 +13,7 @@ func Routers() *gin.Engine  {
 	Router.Use(middleware.CasbinHandler())
 	//Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	ApiGroup := Router.Group("/api/v1")
+	ApiGroup.POST("login",api.Login)
 	// 注册用户路由
 	InitAutoCodeRouter(ApiGroup)
 	InitRoleCodeRouter(ApiGroup)

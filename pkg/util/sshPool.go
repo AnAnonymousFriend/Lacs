@@ -96,8 +96,7 @@ func NewSshClient(d *Device) (*DeviceConfig, error) {
 
 }
 
-
-func (d DeviceConfig) SshSessionCmd(shell string) (string, error) {
+func (d *DeviceConfig) SshSessionCmd(shell string) (string, error) {
 	if d.Client == nil {
 		return "", nil
 	}
