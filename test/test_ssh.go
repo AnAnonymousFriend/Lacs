@@ -18,29 +18,24 @@ type Device struct {
 
 }
 
-
 type DeviceConfig struct {
 	sshType  int
 	sshKeyPath string
 }
+const (
+	PasswordString = iota    // 开始生成枚举值, 默认为0
+	PasswordFile
 
-type Option func(*Device)
+)
 
-func Protocol(p string) Option {
-	return func(s *Device) {
-		s.Protocol = p
+func SetPassword(config *ssh.ClientConfig,sshType int,password string) *ssh.ClientConfig {
+	if sshType == PasswordString {
+		config.Auth = []ssh.AuthMethod{ssh.Password(password)}
 	}
-}
-
-type clientConfig ssh.ClientConfig
-
-func (con clientConfig)SetPassword(sshType int,password string) clientConfig {
-	if sshType == 0 {
-		con.Auth = []ssh.AuthMethod{ssh.Password(password)}
-	} else {
-		con.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
+	if sshType == PasswordFile  {
+		config.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
 	}
-	return con
+	return config
 }
 
 func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
@@ -59,8 +54,6 @@ func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
 	}
 	return ssh.PublicKeys(signer)
 }
-
-
 
 func NewSshDevcie(addr string, port int,user string ,password string, options ...func(*Device)) (*Device, error) {
 	srv := Device{
@@ -86,11 +79,10 @@ func NewSshClient(d *Device) (*ssh.Client, error) {
 	config := &ssh.ClientConfig{
 		Timeout:         time.Second * 5,
 		User:            d.UserName,
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(), //这个可以， 但是不够安全
-		//HostKeyCallback: hostKeyCallBackFunc(h.Host),
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
-	config.Auth = []ssh.AuthMethod{ssh.Password(d.Password)}
+	config = SetPassword(config,0,"root")
 	addr := fmt.Sprintf("%s:%d", d.Host, d.Port)
 	c, err := ssh.Dial("tcp", addr, config)
 	if err != nil {
@@ -98,4 +90,5 @@ func NewSshClient(d *Device) (*ssh.Client, error) {
 		return nil, err
 	}
 	return c, nil
+
 }
