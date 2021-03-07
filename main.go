@@ -2,15 +2,17 @@ package main
 
 import (
 	"Lacs/pkg/setting"
+
 	"Lacs/routers"
 	_ "Lacs/server/api"
 	"fmt"
 	"net"
+
 )
 
 func main(){
-
 	setting.Setup()
+	setting.ScheduleSetup()
 	ginRouter := routers.Routers()
 	ginRouter.Run(setting.AppSetting.Host)
 }

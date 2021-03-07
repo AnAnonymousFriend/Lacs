@@ -4,6 +4,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"golang.org/x/crypto/ssh"
 	"io/ioutil"
+	"sync"
 	"time"
 
 	"fmt"
@@ -21,10 +22,15 @@ type Device struct {
 }
 
 const (
-	PasswordString = iota    // 开始生成枚举值, 默认为0
-	PasswordFile
+	PasswordString = iota
+	PasswordKeyFile
 
 )
+
+type DevicesConnPool struct {
+	connsMu      sync.Mutex
+}
+
 
 type DeviceConfig struct {
 	Clientconfig *ssh.ClientConfig
@@ -50,7 +56,7 @@ func (d *DeviceConfig)SetPassword(sshType int,password string) *DeviceConfig {
 	if sshType == PasswordString {
 		d.Clientconfig.Auth = []ssh.AuthMethod{ssh.Password(password)}
 	}
-	if sshType == PasswordFile  {
+	if sshType == PasswordKeyFile  {
 		d.Clientconfig.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
 	}
 	return d

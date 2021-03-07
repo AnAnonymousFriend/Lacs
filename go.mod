@@ -11,7 +11,7 @@ require (
 	github.com/go-ini/ini v1.62.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/robfig/cron v1.2.0 // indirect
+	github.com/robfig/cron v1.2.0
 	go.mongodb.org/mongo-driver v1.4.6
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
