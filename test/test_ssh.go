@@ -36,14 +36,14 @@ const (
 )
 
 func main()  {
-	oneDevice,_ := NewDevcie("172.168.1.76",22,"huoshen","123456")
+	oneDevice,_ := NewDevcie("172.168.1.24",22,"admin","fs.com123")
 	oneClient := &DeviceClient{
 		Devices: oneDevice,
 	}
 	oneClient,_ =  oneClient.NewSShClient()
 	if oneClient != nil {
-		res,_ := oneClient.DeviceCmd("ifconfig")
-		println(res)
+		res,_ := oneClient.DeviceCmd("show version")
+		println("res :",res)
 	}
 }
 

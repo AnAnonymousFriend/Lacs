@@ -3,6 +3,7 @@ module Lacs/test
 go 1.15
 
 require (
+	github.com/bramvdbogaerde/go-scp v0.0.0-20201229172121-7a6c0268fa67 // indirect
 	github.com/casbin/casbin/v2 v2.23.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	go.mongodb.org/mongo-driver v1.4.6 // indirect
