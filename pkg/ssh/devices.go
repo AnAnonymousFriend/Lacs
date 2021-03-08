@@ -10,20 +10,18 @@ import (
 	"fmt"
 )
 
-
-
 const (
 	PasswordString = iota
 	PasswordKeyFile
 
 )
 
-// create new Devices
+// create New Devices
 func NewDevcie(addr string, port int,user string ,password string, options ...func(*Device)) (*Device, error) {
 	srv := Device{
 		Host:     addr,
 		Port:     port,
-		Protocol: "tcp",
+		ProtocolType: "tcp",
 		Password:password,
 		UserName:user,
 	}
@@ -34,15 +32,15 @@ func NewDevcie(addr string, port int,user string ,password string, options ...fu
 }
 
 // set Devices visit to info Password
-func (d *DeviceClient)SetPassword(sshType int,password string) *DeviceClient {
+func (dec *DeviceClient)SetPassword(sshType int,password string) *DeviceClient {
 
 	if sshType == PasswordString {
-		d.ClientConfig.Auth = []ssh.AuthMethod{ssh.Password(password)}
+		dec.ClientConfig.Auth = []ssh.AuthMethod{ssh.Password(password)}
 	}
 	if sshType == PasswordKeyFile {
-		d.ClientConfig.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
+		dec.ClientConfig.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
 	}
-	return d
+	return dec
 }
 
 // Get KeyFile Password
@@ -64,7 +62,7 @@ func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
 }
 
 // Create New SSHClient
-func (dc *DeviceClient)NewSshClient(d *Device) (*DeviceClient, error) {
+func (dec *DeviceClient)NewSShClient(d *Device) (*DeviceClient, error) {
 	config := &DeviceClient{
 		ClientConfig: &ssh.ClientConfig{
 			Timeout:         time.Second * 5,
@@ -81,14 +79,14 @@ func (dc *DeviceClient)NewSshClient(d *Device) (*DeviceClient, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	dc.Client = c
-	return dc, nil
+	dec.Client = c
+	return dec, nil
 
 }
 
 //  executive command
-func (d *DeviceClient) DeviceCmd(shell string) (string, error) {
-	if d.Client == nil {
+func (dec *DeviceClient) DeviceCmd(shell string) (string, error) {
+	if dec.Client == nil {
 		return "", nil
 	}
 
@@ -96,7 +94,7 @@ func (d *DeviceClient) DeviceCmd(shell string) (string, error) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	session, err := d.Client.NewSession()
+	session, err := dec.Client.NewSession()
 	if err != nil {
 		return "", err
 	}

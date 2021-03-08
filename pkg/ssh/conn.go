@@ -9,13 +9,13 @@ type PoolConn struct {
 	deviceName string
 	mu       sync.RWMutex
 	c        *DeviceClient
-	unusable bool
 }
 
 type DeviceClient struct {
 	Client    *ssh.Client
 	ClientConfig *ssh.ClientConfig
 	Devices Device
+	unusable bool
 }
 
 type Device struct {
@@ -23,7 +23,7 @@ type Device struct {
 	Port     int	   // 端口 22
 	UserName     string // 用户名
 	Password string // 密码
-	ProtocolType string
+	ProtocolType string //协议类型
 }
 
 
