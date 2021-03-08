@@ -8,6 +8,6 @@ import (
 func ScheduleSetup()  {
 	job := c.NewSchedule()
 	job.AddScheduleJob(s.PingDevices)
-	go	job.ScheduleRun(1)
+	go job.ScheduleRun(1)
 }
 

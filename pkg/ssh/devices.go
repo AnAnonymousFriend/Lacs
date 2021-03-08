@@ -1,4 +1,4 @@
-package util
+package ssh
 
 import (
 	"github.com/mitchellh/go-homedir"
@@ -11,15 +11,6 @@ import (
 )
 
 
-type Device struct {
-	Host     string // IP 地址
-	Port     int	   // 端口 22
-	UserName     string // 用户命
-	Password string // 密码
-	conf *DeviceConfig
-	Protocol string
-
-}
 
 const (
 	PasswordString = iota
@@ -27,17 +18,8 @@ const (
 
 )
 
-type DevicesConnPool struct {
-	connsMu      sync.Mutex
-}
-
-
-type DeviceConfig struct {
-	Clientconfig *ssh.ClientConfig
-	Client *ssh.Client
-}
-
-func NewSshDevcie(addr string, port int,user string ,password string, options ...func(*Device)) (*Device, error) {
+// create new Devices
+func NewDevcie(addr string, port int,user string ,password string, options ...func(*Device)) (*Device, error) {
 	srv := Device{
 		Host:     addr,
 		Port:     port,
@@ -51,17 +33,19 @@ func NewSshDevcie(addr string, port int,user string ,password string, options ..
 	return &srv, nil
 }
 
-func (d *DeviceConfig)SetPassword(sshType int,password string) *DeviceConfig {
+// set Devices visit to info Password
+func (d *DeviceClient)SetPassword(sshType int,password string) *DeviceClient {
 
 	if sshType == PasswordString {
-		d.Clientconfig.Auth = []ssh.AuthMethod{ssh.Password(password)}
+		d.ClientConfig.Auth = []ssh.AuthMethod{ssh.Password(password)}
 	}
-	if sshType == PasswordKeyFile  {
-		d.Clientconfig.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
+	if sshType == PasswordKeyFile {
+		d.ClientConfig.Auth = []ssh.AuthMethod{publicKeyAuthFunc(password)}
 	}
 	return d
 }
 
+// Get KeyFile Password
 func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
 	keyPath, err := homedir.Expand(kPath)
 	if err != nil {
@@ -79,33 +63,39 @@ func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
 	return ssh.PublicKeys(signer)
 }
 
-func NewSshClient(d *Device) (*DeviceConfig, error) {
-	config := &DeviceConfig{
-		Clientconfig: &ssh.ClientConfig{
+// Create New SSHClient
+func (dc *DeviceClient)NewSshClient(d *Device) (*DeviceClient, error) {
+	config := &DeviceClient{
+		ClientConfig: &ssh.ClientConfig{
 			Timeout:         time.Second * 5,
 			User:            d.UserName,
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		},
 	}
 
-	config = config.SetPassword(0,"root")
+	// 设置设备访问密码，如果是keyFile ,password 为访问文件路径
+	config = config.SetPassword(PasswordString,d.Password)
 	addr := fmt.Sprintf("%s:%d", d.Host, d.Port)
-	c, err := ssh.Dial("tcp", addr, config.Clientconfig)
+	c, err := ssh.Dial("tcp", addr, config.ClientConfig)
 	if err != nil {
-		println(err)
-		config.Client = nil
+		fmt.Println(err)
 		return nil, err
-
 	}
-	config.Client = c
-	return config, nil
+	dc.Client = c
+	return dc, nil
 
 }
 
-func (d *DeviceConfig) SshSessionCmd(shell string) (string, error) {
+//  executive command
+func (d *DeviceClient) DeviceCmd(shell string) (string, error) {
 	if d.Client == nil {
 		return "", nil
 	}
+
+	var mu sync.Mutex
+	mu.Lock()
+	defer mu.Unlock()
+
 	session, err := d.Client.NewSession()
 	if err != nil {
 		return "", err
