@@ -2,6 +2,7 @@ package ssh
 
 import (
 	"net"
+	"sync"
 )
 
 
@@ -28,6 +29,12 @@ type Pool interface {
 
 	// Len returns the current number of connections of the pool.
 	Len() int
+}
+
+type PoolConn struct {
+	deviceName string
+	mu       sync.RWMutex
+	c        *DeviceClient
 }
 
 

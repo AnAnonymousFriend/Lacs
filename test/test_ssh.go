@@ -47,8 +47,6 @@ func main()  {
 	}
 }
 
-
-
 // create New Devices
 func NewDevcie(addr string, port int,user string ,password string, options ...func(*Device)) (*Device, error) {
 	srv := Device{

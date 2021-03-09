@@ -10,11 +10,23 @@ import (
 	"fmt"
 )
 
-const (
-	PasswordString = iota
-	PasswordKeyFile
 
-)
+
+type DeviceClient struct {
+	Client    *ssh.Client
+	ClientConfig *ssh.ClientConfig
+	Devices Device
+	unusable bool
+}
+
+type Device struct {
+	Host     string // IP 地址
+	Port     int	   // 端口 22
+	UserName     string // 用户名
+	Password string // 密码
+	ProtocolType string //协议类型
+}
+
 
 // create New Devices
 func NewDevcie(addr string, port int,user string ,password string, options ...func(*Device)) (*Device, error) {
@@ -102,5 +114,8 @@ func (dec *DeviceClient) DeviceCmd(shell string) (string, error) {
 	buf, err := session.CombinedOutput(shell)
 	return  string(buf),err
 }
+
+
+
 
 
