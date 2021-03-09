@@ -88,6 +88,8 @@ func checkError(err error, info string) {
 	}
 }
 
+
+
 func MuxShell(w io.Writer, r, e io.Reader) (chan<- string, <-chan string) {
 	in := make(chan string, 3)
 	out := make(chan string, 5)

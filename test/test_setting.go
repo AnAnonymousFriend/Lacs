@@ -9,7 +9,6 @@ type Server struct {
 type Options func(*Server)
 func MaxConns(maxconns int) Options { return func(s *Server) { s.MaxConns = maxconns }}
 func Protocols (p string) Options { return func(s *Server) { s.Protocol = p }}
-
 func NewServer(addr string, port int, options ...func(*Server)) (*Server, error) {
 
 	srv := Server{

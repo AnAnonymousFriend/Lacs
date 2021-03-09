@@ -10,16 +10,14 @@ import (
 	"fmt"
 )
 
-
-
-type DeviceClient struct {
+type ServiceClient struct {
 	Client    *ssh.Client
 	ClientConfig *ssh.ClientConfig
-	Devices Device
+	Devices ServiceDevice
 	unusable bool
 }
 
-type Device struct {
+type ServiceDevice struct {
 	Host     string // IP 地址
 	Port     int	   // 端口 22
 	UserName     string // 用户名
@@ -29,8 +27,8 @@ type Device struct {
 
 
 // create New Devices
-func NewDevcie(addr string, port int,user string ,password string, options ...func(*Device)) (*Device, error) {
-	srv := Device{
+func NewServiceDevice(addr string, port int,user string ,password string, options ...func(*ServiceDevice)) (*ServiceDevice, error) {
+	srv := ServiceDevice{
 		Host:     addr,
 		Port:     port,
 		ProtocolType: "tcp",
@@ -44,7 +42,7 @@ func NewDevcie(addr string, port int,user string ,password string, options ...fu
 }
 
 // set Devices visit to info Password
-func (dec *DeviceClient)SetPassword(sshType int,password string) *DeviceClient {
+func (dec *ServiceClient)SetPassword(sshType int,password string) *ServiceClient {
 
 	if sshType == PasswordString {
 		dec.ClientConfig.Auth = []ssh.AuthMethod{ssh.Password(password)}
@@ -74,8 +72,8 @@ func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
 }
 
 // Create New SSHClient
-func (dec *DeviceClient)NewSShClient(d *Device) (*DeviceClient, error) {
-	config := &DeviceClient{
+func (dec *ServiceClient)NewSShClient(d *ServiceDevice) (*ServiceClient, error) {
+	config := &ServiceClient{
 		ClientConfig: &ssh.ClientConfig{
 			Timeout:         time.Second * 5,
 			User:            d.UserName,
@@ -97,7 +95,7 @@ func (dec *DeviceClient)NewSShClient(d *Device) (*DeviceClient, error) {
 }
 
 //  executive command
-func (dec *DeviceClient) DeviceCmd(shell string) (string, error) {
+func (dec *ServiceClient) DeviceCmd(shell string) (string, error) {
 	if dec.Client == nil {
 		return "", nil
 	}
