@@ -17,6 +17,7 @@ func GetDevices(c *gin.Context){
 	c.String(http.StatusOK, "hello, world")
 }
 
+
 func DeviceCmd(c *gin.Context)  {
 	oneDevice,_ := s.NewSwitchDevices("172.168.1.24",22,"admin","fs.com123")
 	oneClient := &s.SwitchClient{
