@@ -1,9 +1,7 @@
 package ssh
 
 import (
-	"github.com/mitchellh/go-homedir"
 	"golang.org/x/crypto/ssh"
-	"io/ioutil"
 	"sync"
 	"time"
 
@@ -13,7 +11,7 @@ import (
 type ServiceClient struct {
 	Client    *ssh.Client
 	ClientConfig *ssh.ClientConfig
-	Devices ServiceDevice
+	Devices *ServiceDevice
 	unusable bool
 }
 
@@ -53,23 +51,6 @@ func (dec *ServiceClient)SetPassword(sshType int,password string) *ServiceClient
 	return dec
 }
 
-// Get KeyFile Password
-func publicKeyAuthFunc(kPath string) ssh.AuthMethod {
-	keyPath, err := homedir.Expand(kPath)
-	if err != nil {
-		println("find key's home dir failed", err)
-	}
-	key, err := ioutil.ReadFile(keyPath)
-	if err != nil {
-		println("ssh key file read failed", err)
-	}
-	// Create the Signer for this private key.
-	signer, err := ssh.ParsePrivateKey(key)
-	if err != nil {
-		println("ssh key signer failed", err)
-	}
-	return ssh.PublicKeys(signer)
-}
 
 // Create New SSHClient
 func (dec *ServiceClient)NewSShClient(d *ServiceDevice) (*ServiceClient, error) {

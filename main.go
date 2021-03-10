@@ -12,7 +12,7 @@ import (
 
 func main(){
 	setting.Setup()
-	setting.ScheduleSetup()
+	//setting.ScheduleSetup()
 	ginRouter := routers.Routers()
 	ginRouter.Run(setting.AppSetting.Host)
 }

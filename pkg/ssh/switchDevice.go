@@ -14,7 +14,7 @@ import (
 type SwitchClient struct {
 	Client    *ssh.Client
 	ClientConfig *ssh.ClientConfig
-	Devices ServiceDevice
+	Devices *SwitchDevices
 	unusable bool
 }
 
@@ -37,7 +37,6 @@ func NewSwitchDevices(addr string, port int,user string ,password string) (*Swit
 
 	return &srv, nil
 }
-
 
 func (dec *SwitchClient)NewSShClient(d *SwitchDevices) (*SwitchClient, error) {
 	config := &SwitchClient{
@@ -75,7 +74,8 @@ func (dec *SwitchClient)SetPassword(sshType int,password string) *SwitchClient {
 	return dec
 }
 
-func (dec *SwitchClient) DeviceCmd(shell string)  {
+func (dec *SwitchClient) DeviceCmd(cmd []string)  string {
+	var res strings.Builder
 	modes := ssh.TerminalModes{
 		ssh.ECHO:          1,     // disable echoing
 		ssh.TTY_OP_ISPEED: 14400, // input speed = 14.4k baud
@@ -97,28 +97,29 @@ func (dec *SwitchClient) DeviceCmd(shell string)  {
 	if err != nil {
 		panic(err)
 	}
-	e, err := session.StderrPipe()
-	if err != nil {
-		panic(err)
-	}
 
-	in, out := MuxShell(w, r, e)
+	in, out := MuxShell(w, r)
 	if err := session.Shell(); err != nil {
 		fmt.Println(err)
 	}
+
 	<-out //ignore the shell output
-	in <- "show arp"
-	in <- "show int status"
+	for _,c := range cmd{
+		in <- c
+	}
 
-	in <- "exit"
-	in <- "exit"
+	//fmt.Printf("%s\n %s\n", <-out, <-out)
+	for ou := range out {
+		res.WriteString(ou)
+		fmt.Printf("%s\n ", ou)
+	}
 
-	_, _ = <-out, <-out
 	session.Wait()
+	return res.String()
+
 }
 
-
-func MuxShell(w io.Writer, r, e io.Reader) (chan<- string, <-chan string) {
+func MuxShell(w io.Writer, r io.Reader) (chan<- string, <-chan string) {
 	in := make(chan string, 3)
 	out := make(chan string, 5)
 	var wg sync.WaitGroup
