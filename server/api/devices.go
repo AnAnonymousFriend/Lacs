@@ -11,13 +11,16 @@ import (
 // @Summary 查找
 // @Produce  json
 // @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
-// @Router /api/v1/login [Post]
+// @Router /api/v1/devices/get [Post]
 func GetDevices(c *gin.Context){
 	log.Error("Test Error")
 	c.String(http.StatusOK, "hello, world")
 }
 
-
+// @Summary 设备发送指令
+// @Produce  json
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/devices/Cmd [Get]
 func DeviceCmd(c *gin.Context)  {
 	oneDevice,_ := s.NewSwitchDevices("172.168.1.24",22,"admin","fs.com123")
 	oneClient := &s.SwitchClient{
