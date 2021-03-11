@@ -2,17 +2,17 @@ package main
 
 import (
 	"Lacs/pkg/setting"
-
+	c "Lacs/cwmp"
 	"Lacs/routers"
 	_ "Lacs/server/api"
 	"fmt"
 	"net"
-
 )
 
 func main(){
 	setting.Setup()
 	//setting.ScheduleSetup()
+	go c.CwmpService()
 	ginRouter := routers.Routers()
 	ginRouter.Run(setting.AppSetting.Host)
 
