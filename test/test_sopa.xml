@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<soap_env:Envelope
+        xmlns:soap_env="http://schemas.xmlsoap.org/soap/envelope/"
+        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit.xsd" >
+
+
+    <rabbit:queue id="myQueue" name="myQueue" durable="true" auto-delete="false" exclusive="false" />
+    <rabbit:queue id="myQueue2" name="${xx.xxx.xx}" durable="true" auto-delete="false" exclusive="false" />
+
+
+    <!-- 定义监听器 -->
+    <rabbit:listener-container connection-factory="mqConnectionFactory" acknowledge="auto">
+        <rabbit:listener queues="myQueue" ref="queueListenter"/>
+    </rabbit:listener-container>
+
+    <rabbit:listener-container connection-factory="connectionFactory" >
+        <rabbit:listener  queues="mq.asdf"  ref="asdfConsumer"/>
+    </rabbit:listener-container>
+</soap_env:Envelope>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+ <soap_env:Envelope
+xmlns:soap_env="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:soap_enc="http://schemas.xmlsoap.org/soap/encoding/"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:cwmp="urn:dslforum-org:cwmp-1-2">
+  <soap_env:Header>
+   <cwmp:ID soap_env:mustUnderstand="1">34</cwmp:ID>
+  </soap_env:Header>
+  <soap_env:Body>
+   <cwmp:Inform>
+    <DeviceId>
+     <Manufacturer>easycwmp_S3900</Manufacturer>
+     <OUI>FFFFFF</OUI>
+     <ProductClass>easycwmp_S3900</ProductClass>
+     <SerialNumber>FFFFFF123456</SerialNumber>
+    </DeviceId>
+    <Event soap_enc:arrayType="cwmp:EventStruct[3]">
+     <EventStruct>
+      <EventCode>0 BOOTSTRAP</EventCode>
+      <CommandKey />
+     </EventStruct>
+     <EventStruct>
+      <EventCode>2 PERIODIC</EventCode>
+      <CommandKey />
+     </EventStruct>
+     <EventStruct>
+      <EventCode>4 VALUE CHANGE</EventCode>
+      <CommandKey />
+     </EventStruct>
+    </Event>
+    <MaxEnvelopes>1</MaxEnvelopes>
+    <CurrentTime>2000-01-01T03:47:34+00:00</CurrentTime>
+    <RetryCount>29</RetryCount>
+    <ParameterList soap_enc:arrayType="cwmp:ParameterValueStruct[9]">
+     <ParameterValueStruct>
+      <Name>Device.DeviceSummary</Name>
+      <Value xsi:type="xsd:string">InternetGatewayDevice:1.1[](Baseline:1, EthernetLAN:1, WiFiLAN:1, EthernetWAN:1, Time:1, IPPing:1, DeviceAssociation:1)</Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.DeviceInfo.SpecVersion</Name>
+      <Value xsi:type="xsd:string">1.0</Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.DeviceInfo.HardwareVersion</Name>
+      <Value xsi:type="xsd:string"></Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.DeviceInfo.SoftwareVersion</Name>
+      <Value xsi:type="xsd:string"></Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.DeviceInfo.ProvisioningCode</Name>
+      <Value xsi:type="xsd:string">20</Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.ManagementServer.ConnectionRequestURL</Name>
+      <Value xsi:type="xsd:string">http://192.168.0.1:7547/</Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.ManagementServer.ConnectionRequestUsername</Name>
+      <Value xsi:type="xsd:string">easycwmp</Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.ManagementServer.ConnectionRequestPassword</Name>
+      <Value xsi:type="xsd:string">easycwmp</Value>
+     </ParameterValueStruct>
+     <ParameterValueStruct>
+      <Name>Device.ManagementServer.ParameterKey</Name>
+      <Value xsi:type="xsd:string"> </Value>
+     </ParameterValueStruct>
+    </ParameterList>
+   </cwmp:Inform>
+  </soap_env:Body>
+ </soap_env:Envelope>
