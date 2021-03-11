@@ -15,6 +15,7 @@ func main(){
 	//setting.ScheduleSetup()
 	ginRouter := routers.Routers()
 	ginRouter.Run(setting.AppSetting.Host)
+
 }
 
 func handleUDPConnection()  {
@@ -22,7 +23,7 @@ func handleUDPConnection()  {
 	if err !=nil {
 		fmt.Println(err)
 	}
-	fmt.Println("Local:<%s> \n",listener.LocalAddr().String())
+	fmt.Println("Local :<%s>\n",listener.LocalAddr().String())
 	data := make([]byte,1024)
 	for {
 		n, remoteAddr, err := listener.ReadFromUDP(data)

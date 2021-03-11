@@ -62,7 +62,7 @@ func AddUser(c *gin.Context)  {
 	}
 
 	inert, err := collection.InsertOne(context.Background(), parm)
-	if err !=nil {
+	if err != nil {
 		println(err)
 	}
 	fmt.Println(inert)

@@ -11,6 +11,8 @@ import (
 type App struct {
 	Host string
 	JwtSecret string
+	AesSecret  string
+	DesSecret  string
 }
 
 type Log struct {
