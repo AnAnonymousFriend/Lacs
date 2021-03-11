@@ -9,16 +9,12 @@ import (
 
 
 type Beans struct {
-	//XMLName xml.Name `xml:"beans"`
-	XMLName xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ soap_env`
-	RabbitQueues []RabbitQueue `xml:"http://www.springframework.org/schema/rabbit queue"`
+	Envelope xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ soap_env`
+	//Header xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ soap_env`
+	Header []CwmpID `xml:"http://schemas.xmlsoap.org/soap/envelope/ Header`
 	ListenerContainers []ListenerContainer `xml:"http://www.springframework.org/schema/rabbit listener-container"`
 }
 
-type RabbitQueue struct {
-	Name string `xml:"name,attr"`
-	Id string `xml:"id,attr"`
-}
 
 type ListenerContainer struct {
 	Listeners []RabbitListener `xml:"http://www.springframework.org/schema/rabbit listener"`
@@ -26,6 +22,19 @@ type ListenerContainer struct {
 
 type RabbitListener struct {
 	Queues string `xml:"queues,attr"`
+}
+
+type CwmpID struct {
+	ID xml.Name `xml:"urn:dslforum-org:cwmp-1-2 cwmp"`
+}
+
+type CwmpIDQ struct {
+	ServerName string   `xml:"serverName"`
+}
+
+type RabbitQueue struct {
+	Name string `xml:"name,attr"`
+	Id string `xml:"id,attr"`
 }
 
 func main() {
@@ -47,8 +56,12 @@ func main() {
 		return
 	}
 
-	fmt.Println(v)
-	fmt.Println("SmtpServer : ",v.RabbitQueues)
-	fmt.Println("SmtpServer : ",v.XMLName)
+	fmt.Println(v.Header[0].ID)
+	fmt.Println(len(v.ListenerContainers))
+	//fmt.Println(v.Header)
+	//fmt.Println(v.Envelope)
+	//fmt.Println("SmtpServer : ",v.Header)
+	//fmt.Println("SmtpServer : ",v.HeaderTwo.ID)
+	//fmt.Println("SmtpServer : ",v.XMLName)
 
 }
