@@ -2,6 +2,7 @@ package main
 
 import (
 	"Lacs/pkg/setting"
+
 	c "Lacs/cwmp"
 	"Lacs/routers"
 	_ "Lacs/server/api"
@@ -35,9 +36,5 @@ func handleUDPConnection()  {
 		if err != nil {
 			fmt.Printf(err.Error())
 		}
-
-
 	}
-
-	fmt.Println("Welcome to LACS！")
 }

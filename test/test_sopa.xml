@@ -4,11 +4,9 @@
         xmlns:soap_enc="http://schemas.xmlsoap.org/soap/encoding/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:cwmp="urn:dslforum-org:cwmp-1-2"
-        xmlns:rabbit="http://www.springframework.org/schema/rabbit"
-        >
+        xmlns:cwmp="urn:dslforum-org:cwmp-1-2">
     <soap_env:Header>
-        <cwmp:ID soap_env:mustUnderstand="1">62</cwmp:ID>
+        <cwmp:ID  soap_env:mustUnderstand="1">62</cwmp:ID>
     </soap_env:Header>
 
     <rabbit:listener-container connection-factory="mqConnectionFactory" acknowledge="auto">

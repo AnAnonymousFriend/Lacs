@@ -9,11 +9,15 @@ import (
 
 
 type Beans struct {
-	Envelope xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ soap_env`
-	//Header xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ soap_env`
-	Header []CwmpID `xml:"http://schemas.xmlsoap.org/soap/envelope/ Header`
+	Header CwmpId `xml:"http://schemas.xmlsoap.org/soap/envelope/ Header`
 	ListenerContainers []ListenerContainer `xml:"http://www.springframework.org/schema/rabbit listener-container"`
 }
+
+type CwmpId struct {
+	ID string `xml:"urn:dslforum-org:cwmp-1-2 ID"`
+}
+
+
 
 
 type ListenerContainer struct {
@@ -56,7 +60,7 @@ func main() {
 		return
 	}
 
-	fmt.Println(v.Header[0].ID)
+	fmt.Println(v.Header.ID)
 	fmt.Println(len(v.ListenerContainers))
 	//fmt.Println(v.Header)
 	//fmt.Println(v.Envelope)
