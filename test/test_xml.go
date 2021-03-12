@@ -11,7 +11,6 @@ import (
 type Beans struct {
 	Header CwmpId `xml:"http://schemas.xmlsoap.org/soap/envelope/ Header`
 	Body XmlBody `xml:"http://schemas.xmlsoap.org/soap/envelope/ Body`
-	ListenerContainers []ListenerContainer `xml:"http://www.springframework.org/schema/rabbit listener-container"`
 }
 
 type CwmpId struct {
@@ -57,28 +56,6 @@ type DeviceInfo struct {
 	SerialNumber     string   `xml:"SerialNumber"`
 }
 
-
-
-type ListenerContainer struct {
-	Listeners []RabbitListener `xml:"http://www.springframework.org/schema/rabbit listener"`
-}
-
-type RabbitListener struct {
-	Queues string `xml:"queues,attr"`
-}
-
-type CwmpID struct {
-	ID xml.Name `xml:"urn:dslforum-org:cwmp-1-2 cwmp"`
-}
-
-type CwmpIDQ struct {
-	ServerName string   `xml:"serverName"`
-}
-
-type RabbitQueue struct {
-	Name string `xml:"name,attr"`
-	Id string `xml:"id,attr"`
-}
 
 func main() {
 	file, err := os.Open("test_sopa.xml") // For read access.
